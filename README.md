@@ -6,9 +6,49 @@ Dashboard theo dõi hiệu suất Sales & Marketing — từ doanh số, phễu 
 
 ---
 
-## Lưu ý về dữ liệu
+## Kiến Trúc Pipeline
 
-Pipeline thực tế: Call API từ các nguồn (CRM, Facebook Ads, Google Ads, TikTok Ads, Pancake) → đẩy vào SQL Server → build dashboard trên Power BI.
+Data được thu thập từ 5 nguồn, xử lý qua Python, lưu vào SQL Server và trực quan hóa trên Power BI. Toàn bộ pipeline được orchestrate và schedule tự động bằng Dagster.
+
+```mermaid
+flowchart LR
+    A1([He thong don hang\nDoanh so, so luong ban]) --> P
+    A2([CRM\nSDT khach hang, pheu tu van]) --> P
+    A3([Pancake\nTin nhan, page, hoi thoai]) --> P
+    A4([Google Ads\nSpend, Impression, Click]) --> P
+    A5([Google Sheet\nKPI nhan vien]) --> P
+
+    P([Python\nCall API & Clean Data]) --> S([SQL Server\nData Modeling])
+    S --> D([Power BI\nDashboard])
+
+    Dagster([Dagster\nSchedule & Orchestrate]) -.-> P
+
+    style A1 fill:#f7d794,stroke:#e6b84a
+    style A2 fill:#f7d794,stroke:#e6b84a
+    style A3 fill:#f7d794,stroke:#e6b84a
+    style A4 fill:#f7d794,stroke:#e6b84a
+    style A5 fill:#f7d794,stroke:#e6b84a
+    style P fill:#a8d5c2,stroke:#5aab8e
+    style S fill:#c9b8e8,stroke:#9b7fd4
+    style D fill:#f4a9a8,stroke:#e07b7b
+    style Dagster fill:#b8d4f4,stroke:#5a8ab8
+```
+
+| Tầng | Vai trò |
+|---|---|
+| Hệ thống đơn hàng | Doanh số, số lượng bán |
+| CRM | SĐT khách hàng, phễu tư vấn → chốt đơn |
+| Pancake | Tin nhắn, page, hội thoại |
+| Google Ads | Spend, Impression, Click, Conversion |
+| Google Sheet | KPI nhân viên |
+| Python | Call API từng nguồn, làm sạch data và load vào SQL Server |
+| Dagster | Schedule chạy tự động, monitor từng job, retry khi có lỗi |
+| SQL Server | Lưu trữ, modeling, tính toán các metrics |
+| Power BI | Trực quan hóa, dashboard, time intelligence |
+
+---
+
+## Lưu ý về dữ liệu
 
 Do yêu cầu bảo mật, dữ liệu trong dashboard này đã được xuất ra file Excel và thay thế bằng fake data. Các con số, tên nhân viên, tên page, tỉnh thành hiển thị trên dashboard không phản ánh số liệu thực tế — chỉ mang tính minh họa cho cấu trúc và logic phân tích.
 
@@ -166,22 +206,12 @@ Ví dụ: Ngày 20/5, % Achieved (Full Month) = 28.68% nhưng % Achieved (MTD) =
 
 ---
 
-## Nguồn Dữ Liệu
-
-| Nguồn | Bảng |
-|---|---|
-| CRM | `fact_sales`, `fact_kpi_sales`, `fact_lead_daily_full_metric` |
-| Pancake | `fact_pages_campaigns`, `dim_pages` |
-| Facebook Ads | `fact_ad_id` |
-| Google Ads | `ad_group_performance` |
-| TikTok Ads | `tiktok_ads` |
-
----
-
 ## Công Nghệ Sử Dụng
 
+- Python — Call API, làm sạch data và load vào SQL Server
+- Dagster — Schedule tự động, orchestrate và monitor pipeline
+- SQL Server — Lưu trữ, modeling, tính toán metrics
 - Power BI — Trực quan hóa & báo cáo
-- SQL Server — Xử lý & mô hình hóa dữ liệu
 - DAX — Measures, KPI, time intelligence
 
 ---
