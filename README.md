@@ -215,6 +215,3 @@ Ví dụ: Ngày 20/5, % Achieved (Full Month) = 28.68% nhưng % Achieved (MTD) =
 - DAX — Measures, KPI, time intelligence
 
 ---
-
-## Cập nhật lần cuối
-2026-05-20
