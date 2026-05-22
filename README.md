@@ -2,7 +2,7 @@
 
 Dashboard theo dõi hiệu suất Sales & Marketing — từ doanh số, phễu tư vấn đến quảng cáo. Mục tiêu là giúp team xác định đúng vấn đề và hành động kịp thời.
 
-## [Xem Interactive Dashboard tại đây](YOUR_LINK_HERE)
+## [Xem Interactive Dashboard tại đây](https://report.onhandbi.com/public/report?token=eyJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfbGlua19pZCI6NjUyLCJoYXNfcGFzc2NvZGUiOmZhbHNlLCJ0aW1lIjoxNzc5NDI0ODEyfQ.HAXS6eA6CcDFiJ4y_V1-pdeQlnpXUF862bWl-kZ7APk)
 
 ---
 
